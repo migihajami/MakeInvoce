@@ -1,4 +1,7 @@
-﻿using MakeInoice.Common.ViewModels;
+﻿using AutoMapper;
+using MakeInoice.Common.ViewModels;
+using MakeInvoice.Api.Interfaces;
+using MakeInvoice.Api.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -6,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace MakeInvoice.Api.Controllers
@@ -17,53 +21,65 @@ namespace MakeInvoice.Api.Controllers
     /// <date>2021-10-18</date>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.Controller" />
     [Authorize()]
+    [ApiController]
+    [Route("[controller]/[action]")]
     public class CompanyController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly ICompanyRepository _companyRepo;
+        private readonly IMapper _mapper;
 
-        public CompanyController(UserManager<IdentityUser> userManager)
+        public CompanyController(ICompanyRepository companyRepo, IMapper mapper)
         {
-            _userManager = userManager;
+            _companyRepo = companyRepo;
+            _mapper = mapper;
         }
 
-        [Authorize(Roles = "Admin")]
-        public IActionResult CompanyList()
+        [HttpPost]
+        public async Task<ActionResult<List<CompanyViewModel>>> CompanyList()
         {
-            return View();
+            var model = await _companyRepo
+                .FindAll(a => a.OwnerID == User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            return new OkObjectResult(_mapper.Map<List<Company>, List<CompanyViewModel>>(model));
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get(int copanyID)
+        [HttpPost]
+        public async Task<ActionResult<CompanyViewModel>> Get(int companyID)
         {
+            var model = await _companyRepo.
+                Find(a => a.ID == companyID && a.OwnerID == User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            return View();
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Add()
-        {
-            var model = new CompanyViewModel();
-
-            return View(model);
+            return new OkObjectResult(_mapper.Map<Company, CompanyViewModel>(model));
         }
 
         [HttpPost]
         public async Task<IActionResult> Add(CompanyViewModel model)
         {
-            return View(model);
+            var company = _mapper.Map<CompanyViewModel, Company>(model);
+            company.OwnerID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            company.InsertDate = DateTime.Now;
+            
+            if (ModelState.IsValid)
+            {
+                await _companyRepo.Create(company);
+                return new OkObjectResult( _mapper.Map<Company, CompanyViewModel>(company));
+            }
+
+            return BadRequest(ModelState);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Update(int companyModelID)
-        {
-            var model = new CompanyViewModel();
-            return View(model);
-        }
 
         [HttpPost]
-        public async Task<IActionResult> Update(CompanyViewModel model)
+        public async Task<ActionResult<CompanyViewModel>> Update(CompanyViewModel model)
         {
-            return View(model);
+            if (ModelState.IsValid)
+            {
+                var company = _mapper.Map<CompanyViewModel, Company>(model);
+                await _companyRepo.Update(company);
+                return new OkObjectResult(model);
+            }
+
+            return BadRequest(ModelState);
         }
 
 

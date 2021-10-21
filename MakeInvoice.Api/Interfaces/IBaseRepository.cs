@@ -17,6 +17,6 @@ namespace MakeInvoice.Api.Interfaces
         Task Update(T item);
         Task Delete(T item);
         Task<T> Find(Func<T, bool> predicate);
-        Task<IList<T>> FindAll(Func<T, bool> predicate = null);
+        Task<List<T>> FindAll(Func<T, bool> predicate = null);
     }
 }

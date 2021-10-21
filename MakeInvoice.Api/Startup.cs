@@ -1,9 +1,11 @@
 using MakeInvoice.Api;
+using MakeInvoice.Api.Map;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -63,8 +65,10 @@ namespace MakeInvoic.Api
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_securityKey))
                 };
             });
-                //.AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAd"));
-
+            //.AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAd"));
+            //services.AddScoped<UserManager<IdentityUser>, UserManager<IdentityUser>>();
+            services.AddIdentity<IdentityUser, IdentityRole>(options => {  }).AddEntityFrameworkStores<ApiDbContext>().AddDefaultTokenProviders();
+            services.AddAutoMapper(typeof(Maps));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
