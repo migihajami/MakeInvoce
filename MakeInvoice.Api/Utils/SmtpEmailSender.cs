@@ -24,13 +24,13 @@ namespace MakeInvoice.Api.Utils
             this.options = options.Value;
         }
 
-        public async Task SendEmailAsync(string fromAddress, string toAddress, string subject, string message)
+        public async Task SendEmailAsync(string from, string to, string subject, string message)
         {
-            var mailMessage = new MailMessage(fromAddress, toAddress, subject, message);
-            using (var client = new SmtpClient(options.Host, options.Port))
+            var mailMessage = new MailMessage(from, to, subject, message);
+            using (var smtpClient = new SmtpClient(options.Host, options.Port))
             {
-                client.Credentials = new NetworkCredential(options.Username, options.Password);
-                await client.SendMailAsync(mailMessage);
+                smtpClient.Credentials = new NetworkCredential(options.Username, options.Password);
+                await smtpClient.SendMailAsync(mailMessage);
             }
         }
     }
