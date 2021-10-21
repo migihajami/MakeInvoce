@@ -42,7 +42,7 @@ namespace MakeInvoice.Api.Repositories
             return await _db.Contractors.FirstOrDefaultAsync(a => predicate(a) && !a.IsDeleted);
         }
 
-        public async Task<IList<Contractor>> FindAll(Func<Contractor, bool> predicate = null)
+        public async Task<List<Contractor>> FindAll(Func<Contractor, bool> predicate = null)
         {
             return await _db.Contractors.Where(a => predicate(a) && !a.IsDeleted).ToListAsync();
         }

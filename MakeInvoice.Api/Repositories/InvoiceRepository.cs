@@ -41,7 +41,7 @@ namespace MakeInvoice.Api.Repositories
             return await _db.Invoices.FirstOrDefaultAsync(a => predicate(a) && !a.IsDeleted);
         }
 
-        public async Task<IList<Invoice>> FindAll(Func<Invoice, bool> predicate = null)
+        public async Task<List<Invoice>> FindAll(Func<Invoice, bool> predicate = null)
         {
             return await _db.Invoices.Where(a => predicate(a) && !a.IsDeleted).ToListAsync();
         }

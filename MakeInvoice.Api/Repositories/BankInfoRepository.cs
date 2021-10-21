@@ -41,7 +41,7 @@ namespace MakeInvoice.Api.Repositories
             return await _db.BankInfos.FirstOrDefaultAsync(a => predicate(a) && !a.IsDeleted);
         }
 
-        public async Task<IList<BankInfo>> FindAll(Func<BankInfo, bool> predicate = null)
+        public async Task<List<BankInfo>> FindAll(Func<BankInfo, bool> predicate = null)
         {
             return await _db.BankInfos.Where(a => predicate(a) && !a.IsDeleted).ToListAsync();
         }
