@@ -1,5 +1,7 @@
 using MakeInvoice.Api;
+using MakeInvoice.Api.Interfaces;
 using MakeInvoice.Api.Map;
+using MakeInvoice.Api.Utils;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -69,6 +71,8 @@ namespace MakeInvoic.Api
             //services.AddScoped<UserManager<IdentityUser>, UserManager<IdentityUser>>();
             services.AddIdentity<IdentityUser, IdentityRole>(options => {  }).AddEntityFrameworkStores<ApiDbContext>().AddDefaultTokenProviders();
             services.AddAutoMapper(typeof(Maps));
+            services.AddSingleton<IEmailSender, SmtpEmailSender>();
+            services.Configure<SmtpOptions>(Configuration.GetSection("Smtp"));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
