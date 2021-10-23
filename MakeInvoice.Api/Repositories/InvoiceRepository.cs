@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace MakeInvoice.Api.Repositories
@@ -36,14 +37,14 @@ namespace MakeInvoice.Api.Repositories
             await _db.SaveChangesAsync();
         }
 
-        public async Task<Invoice> Find(Func<Invoice, bool> predicate)
+        public async Task<Invoice> Find(Expression<Func<Invoice, bool>> expression)
         {
-            return await _db.Invoices.FirstOrDefaultAsync(a => predicate(a) && !a.IsDeleted);
+            return await _db.Invoices.Where(expression).FirstOrDefaultAsync(a => !a.IsDeleted);
         }
 
-        public async Task<List<Invoice>> FindAll(Func<Invoice, bool> predicate = null)
+        public async Task<List<Invoice>> FindAll(Expression<Func<Invoice, bool>> expression)
         {
-            return await _db.Invoices.Where(a => predicate(a) && !a.IsDeleted).ToListAsync();
+            return await _db.Invoices.Where(expression).Where(a => !a.IsDeleted).ToListAsync();
         }
 
         public async Task Update(Invoice item)

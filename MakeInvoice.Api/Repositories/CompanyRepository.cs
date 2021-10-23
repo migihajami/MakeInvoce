@@ -37,14 +37,14 @@ namespace MakeInvoice.Api.Repositories
             await _db.SaveChangesAsync();
         }
 
-        public async Task<Company> Find(Func<Company, bool> predicate)
+        public async Task<Company> Find(Expression<Func<Company, bool>> expression)
         {
-            return await _db.Companies.FirstOrDefaultAsync(a => predicate(a) && !a.IsDeleted);
+            return await _db.Companies.Where(expression).FirstOrDefaultAsync(a => !a.IsDeleted);
         }
 
-        public async Task<List<Company>> FindAll(Func<Company, bool> predicate = null)
+        public async Task<List<Company>> FindAll(Expression<Func<Company, bool>> expression = null)
         {
-            return await _db.Companies.Where(a => predicate(a) && !a.IsDeleted).ToListAsync();
+            return await _db.Companies.Where(expression).Where(a => !a.IsDeleted).ToListAsync();
         }
 
         public async Task Update(Company item)
