@@ -16,7 +16,7 @@ namespace MakeInvoice.Api.Controllers
     /// <date>2021-10-21</date>
     [ApiController]
     [Route("[controller]/[action]")]
-    public class IdentityController
+    public class IdentityController: Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
@@ -34,20 +34,49 @@ namespace MakeInvoice.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> Signup(SignupViewModel model)
         {
-            await _emailSender.SendEmailAsync("noreply@makeinvoice.com", model.Email, "Makeinvoice: email confirmation", "confirm email");
-            throw new NotImplementedException();
+            if (ModelState.IsValid)
+            {
+                if ((await _userManager.FindByEmailAsync(model.Email)) == null)
+                {
+                    var user = new IdentityUser { Email = model.Email, UserName = model.Email };
+                    var result = await _userManager.CreateAsync(user, model.Password);
+                    user = await _userManager.FindByEmailAsync(model.Email);
+                    if (result.Succeeded)
+                    {
+                        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        var confirmationLink = Url.ActionLink("ConfirmEmail", "Identity", new { userId = user.Id, @token = token });
+                        await _emailSender.SendEmailAsync("noreply@makeinvoice.online", model.Email, "Confirm email", $"confirmation url: {confirmationLink}");
+                        return new OkObjectResult(model.Email);
+                    }
+
+                    ModelState.AddModelError("Signup", string.Join("<br />", result.Errors.Select(a => a.Description)));
+                    return new BadRequestObjectResult("Wrong model");
+                }
+            }
+            return new BadRequestResult();
         }
 
         [HttpPost]
         public async Task<ActionResult> Signin(SigninViewModel model)
         {
-            throw new NotImplementedException();
+            if (ModelState.IsValid)
+            {
+                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
+                if (result.Succeeded)
+                    return new OkResult();
+            }
+            return BadRequest("Can't login");
         }
 
         [HttpPost]
         public async Task<ActionResult> ConfirmEmail(string userId, string token)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.FindByIdAsync(userId);
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+                return new OkObjectResult("Email confirmed");
+
+            return new BadRequestResult();
         }
     }
 }
