@@ -20,7 +20,8 @@ namespace MakeInvoice.Api.Controllers
     /// <author>Alexey Bubley</author>
     /// <date>2021-10-18</date>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.Controller" />
-    [Authorize()]
+    
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [Route("[controller]/[action]")]
     public class CompanyController : Controller
@@ -37,8 +38,9 @@ namespace MakeInvoice.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<List<CompanyViewModel>>> CompanyList()
         {
+            var userID = User.FindFirst(c => c.Type == "jti")?.Value;
             var model = await _companyRepo
-                .FindAll(a => a.OwnerID == User.FindFirstValue(ClaimTypes.NameIdentifier));
+                .FindAll(a => a.OwnerID == userID);
 
             return new OkObjectResult(_mapper.Map<List<Company>, List<CompanyViewModel>>(model));
         }

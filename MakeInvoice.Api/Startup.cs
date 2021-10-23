@@ -1,6 +1,7 @@
 using MakeInvoice.Api;
 using MakeInvoice.Api.Interfaces;
 using MakeInvoice.Api.Map;
+using MakeInvoice.Api.Repositories;
 using MakeInvoice.Api.Utils;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,6 +20,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,12 +52,14 @@ namespace MakeInvoic.Api
             _issuer = Configuration["Jwt:Issuer"];
             _audience = Configuration["Jwt:Audience"];
             _securityKey = Configuration["Jwt:Key"];
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
 
             services.AddDbContext<ApiDbContext>(opt =>
                 opt.UseNpgsql(connString));
 
             services.AddScoped<DbContext, ApiDbContext>();
-
+           
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => 
             {
                 options.RequireHttpsMetadata = false;
@@ -69,6 +73,9 @@ namespace MakeInvoic.Api
             });
             //.AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAd"));
             //services.AddScoped<UserManager<IdentityUser>, UserManager<IdentityUser>>();
+
+            services.AddScoped<ICompanyRepository, CompanyRepository>();
+
             services.AddIdentity<IdentityUser, IdentityRole>(options => {  }).AddEntityFrameworkStores<ApiDbContext>().AddDefaultTokenProviders();
             services.AddAutoMapper(typeof(Maps));
             services.AddSingleton<IEmailSender, SmtpEmailSender>();
@@ -76,7 +83,7 @@ namespace MakeInvoic.Api
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MakeInvoic.Api", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MakeInvoice.Api", Version = "v1" });
             });
         }
 
