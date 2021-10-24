@@ -45,7 +45,7 @@ namespace MakeInvoice.Api.Controllers
                     {
                         var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                         var confirmationLink = Url.ActionLink("ConfirmEmail", "Identity", new { userId = user.Id, @token = token });
-                        await _emailSender.SendEmailAsync("noreply@makeinvoice.online", model.Email, "Confirm email", $"confirmation url: {confirmationLink}");
+                        await _emailSender.SendEmailAsync(model.Email, "Confirm email", $"confirmation url: {confirmationLink}");
                         return new OkObjectResult(model.Email);
                     }
 
