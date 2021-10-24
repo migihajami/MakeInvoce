@@ -24,10 +24,11 @@ namespace MakeInvoice.Api.Repositories
             _db = db;
         }
 
-        public async Task Create(BankInfo item)
+        public async Task<BankInfo> Create(BankInfo item)
         {
             await _db.BankInfos.AddAsync(item);
             await _db.SaveChangesAsync();
+            return item;
         }
 
         public async Task Delete(BankInfo item)

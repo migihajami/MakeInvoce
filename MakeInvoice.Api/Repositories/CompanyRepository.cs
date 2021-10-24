@@ -23,10 +23,11 @@ namespace MakeInvoice.Api.Repositories
         {
             _db = db;
         }
-        public async Task Create(Company item)
+        public async Task<Company> Create(Company item)
         {
             await _db.Companies.AddAsync(item);
             await _db.SaveChangesAsync();
+            return item;
         }
 
         public async Task Delete(Company item)
@@ -50,7 +51,7 @@ namespace MakeInvoice.Api.Repositories
         public async Task Update(Company item)
         {
             var company = await _db.Companies.FindAsync(item.ID);
-            
+
             company.EmailAddress = item.EmailAddress;
             company.IsActive = item.IsActive;
             company.IsDeleted = item.IsDeleted;
