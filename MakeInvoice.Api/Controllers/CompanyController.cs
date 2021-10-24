@@ -24,23 +24,24 @@ namespace MakeInvoice.Api.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [Route("[controller]/[action]")]
-    public class CompanyController : Controller
+    public class CompanyController : MakeInvoiceController
     {
         private readonly ICompanyRepository _companyRepo;
+        private readonly IAddressRepository _addressRepo;
         private readonly IMapper _mapper;
 
-        public CompanyController(ICompanyRepository companyRepo, IMapper mapper)
+        public CompanyController(ICompanyRepository companyRepo, IAddressRepository addressRepo, IMapper mapper)
         {
             _companyRepo = companyRepo;
+            _addressRepo = addressRepo;
             _mapper = mapper;
         }
 
         [HttpPost]
         public async Task<ActionResult<List<CompanyViewModel>>> CompanyList()
         {
-            var userID = User.FindFirst(c => c.Type == "jti")?.Value;
             var model = await _companyRepo
-                .FindAll(a => a.OwnerID == userID);
+                .FindAll(a => a.OwnerID == GetUserID());
 
             return new OkObjectResult(_mapper.Map<List<Company>, List<CompanyViewModel>>(model));
         }
@@ -49,7 +50,7 @@ namespace MakeInvoice.Api.Controllers
         public async Task<ActionResult<CompanyViewModel>> Get(int companyID)
         {
             var model = await _companyRepo.
-                Find(a => a.ID == companyID && a.OwnerID == User.FindFirstValue(ClaimTypes.NameIdentifier));
+                Find(a => a.ID == companyID && a.OwnerID == GetUserID());
 
             return new OkObjectResult(_mapper.Map<Company, CompanyViewModel>(model));
         }
@@ -58,11 +59,31 @@ namespace MakeInvoice.Api.Controllers
         public async Task<IActionResult> Add(CompanyViewModel model)
         {
             var company = _mapper.Map<CompanyViewModel, Company>(model);
-            company.OwnerID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            company.OwnerID = GetUserID();
             company.InsertDate = DateTime.Now;
             
             if (ModelState.IsValid)
             {
+                if (model.LegalAddressID == null)
+                {
+                    if (model.LegalAdress == null)
+                        return BadRequest("Legal Address should be provided");
+
+                    var address = _mapper.Map<AddressViewModel, Address>(model.LegalAdress);
+                    address = await _addressRepo .Create(address);
+                    model.LegalAddressID = address.AddressID;
+                }
+
+                if (model.PostalAddressID == null)
+                {
+                    if (model.PostalAddress == null)
+                        return BadRequest("Postal Address should be provided");
+
+                    var address = _mapper.Map<AddressViewModel, Address>(model.PostalAddress);
+                    address = await _addressRepo.Create(address);
+                    model.PostalAddressID = address.AddressID;
+                }
+
                 await _companyRepo.Create(company);
                 return new OkObjectResult( _mapper.Map<Company, CompanyViewModel>(company));
             }
@@ -76,6 +97,10 @@ namespace MakeInvoice.Api.Controllers
         {
             if (ModelState.IsValid)
             {
+                var isExists = _companyRepo.Find(a => a.ID == model.CompanyID && a.OwnerID == GetUserID()) != null;
+                if (!isExists)
+                    return BadRequest("Company doesn't exist");
+
                 var company = _mapper.Map<CompanyViewModel, Company>(model);
                 await _companyRepo.Update(company);
                 return new OkObjectResult(model);
