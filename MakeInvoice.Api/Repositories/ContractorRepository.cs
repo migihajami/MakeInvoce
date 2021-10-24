@@ -24,14 +24,14 @@ namespace MakeInvoice.Api.Repositories
             _db = db;
         }
 
-        public async Task<Contractor> Create(Contractor item)
+        public async Task<Contractor> CreateAsync(Contractor item)
         {
             await _db.Contractors.AddAsync(item);
             await _db.SaveChangesAsync();
             return item;
         }
 
-        public async Task Delete(Contractor item)
+        public async Task DeleteAsync(Contractor item)
         {
             var contractor = await _db.Contractors.FindAsync(item.ID);
             contractor.IsDeleted = true;
@@ -39,17 +39,17 @@ namespace MakeInvoice.Api.Repositories
             await _db.SaveChangesAsync();
         }
 
-        public async Task<Contractor> Find(Expression<Func<Contractor, bool>> expression)
+        public async Task<Contractor> FindAsync(Expression<Func<Contractor, bool>> expression)
         {
             return await _db.Contractors.Where(expression).FirstOrDefaultAsync(a => !a.IsDeleted);
         }
 
-        public async Task<List<Contractor>> FindAll(Expression<Func<Contractor, bool>> expression)
+        public async Task<List<Contractor>> FindAllAsync(Expression<Func<Contractor, bool>> expression)
         {
             return await _db.Contractors.Where(expression).Where(a => !a.IsDeleted).ToListAsync();
         }
 
-        public async Task Update(Contractor item)
+        public async Task UpdateAsync(Contractor item)
         {
             var contractor = await _db.Contractors.FindAsync(item.ID);
 

@@ -24,31 +24,31 @@ namespace MakeInvoice.Api.Repositories
             _db = db;
         }
 
-        public async Task<Address> Create(Address item)
+        public async Task<Address> CreateAsync(Address item)
         {
             await _db.Addresses.AddAsync(item);
             await _db.SaveChangesAsync();
             return item;
         }
 
-        public async Task Delete(Address item)
+        public async Task DeleteAsync(Address item)
         {
             var address = await _db.Addresses.FindAsync(item.AddressID);
             address.IsDeleted = true;
             await _db.SaveChangesAsync();
         }
 
-        public async Task<Address> Find(Expression<Func<Address, bool>> expression)
+        public async Task<Address> FindAsync(Expression<Func<Address, bool>> expression)
         {
             return await _db.Addresses.Where(expression).FirstOrDefaultAsync(a => !a.IsDeleted);
         }
 
-        public async Task<List<Address>> FindAll(Expression<Func<Address, bool>> expression = null)
+        public async Task<List<Address>> FindAllAsync(Expression<Func<Address, bool>> expression = null)
         {
             return await _db.Addresses.Where(expression).Where(a => !a.IsDeleted).ToListAsync();
         }
 
-        public async Task Update(Address item)
+        public async Task UpdateAsync(Address item)
         {
             var address = await _db.Addresses.FindAsync(item.AddressID);
 

@@ -14,10 +14,10 @@ namespace MakeInvoice.Api.Interfaces
     /// <date>2021-10-18</date>
     public interface IBaseRepository<T> where T: class
     {
-        Task<T> Create(T item);
-        Task Update(T item);
-        Task Delete(T item);
-        Task<T> Find(Expression<Func<T, bool>> expression);
-        Task<List<T>> FindAll(Expression<Func<T, bool>> expression = null);
+        Task<T> CreateAsync(T item);
+        Task UpdateAsync(T item);
+        Task DeleteAsync(T item);
+        Task<T> FindAsync(Expression<Func<T, bool>> expression);
+        Task<List<T>> FindAllAsync(Expression<Func<T, bool>> expression = null);
     }
 }

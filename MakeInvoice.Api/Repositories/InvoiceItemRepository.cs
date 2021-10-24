@@ -24,31 +24,31 @@ namespace MakeInvoice.Api.Repositories
             _db = db;
         }
 
-        public async Task<InvoiceItem> Create(InvoiceItem item)
+        public async Task<InvoiceItem> CreateAsync(InvoiceItem item)
         {
             await _db.InvoiceItems.AddAsync(item);
             await _db.SaveChangesAsync();
             return item;
         }
 
-        public async Task Delete(InvoiceItem item)
+        public async Task DeleteAsync(InvoiceItem item)
         {
             var invoiceItem = await _db.InvoiceItems.FindAsync(item.InvoiceItemID);
             invoiceItem.IsDeleted = true;
             await _db.SaveChangesAsync();
         }
 
-        public async Task<InvoiceItem> Find(Expression<Func<InvoiceItem, bool>> expression)
+        public async Task<InvoiceItem> FindAsync(Expression<Func<InvoiceItem, bool>> expression)
         {
             return await _db.InvoiceItems.Where(expression).FirstOrDefaultAsync(a => !a.IsDeleted);
         }
 
-        public async Task<List<InvoiceItem>> FindAll(Expression<Func<InvoiceItem, bool>> expression = null)
+        public async Task<List<InvoiceItem>> FindAllAsync(Expression<Func<InvoiceItem, bool>> expression = null)
         {
             return await _db.InvoiceItems.Where(expression).Where(a => !a.IsDeleted).ToListAsync();
         }
 
-        public async Task Update(InvoiceItem item)
+        public async Task UpdateAsync(InvoiceItem item)
         {
             var invoiceItem = await _db.InvoiceItems.FindAsync(item.InvoiceItemID);
 
