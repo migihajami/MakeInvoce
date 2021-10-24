@@ -41,7 +41,7 @@ namespace MakeInvoice.Api.Controllers
         public async Task<ActionResult<List<CompanyViewModel>>> CompanyList()
         {
             var model = await _companyRepo
-                .FindAll(a => a.OwnerID == GetUserID());
+                .FindAllAsync(a => a.OwnerID == GetUserID());
 
             return new OkObjectResult(_mapper.Map<List<Company>, List<CompanyViewModel>>(model));
         }
@@ -50,7 +50,7 @@ namespace MakeInvoice.Api.Controllers
         public async Task<ActionResult<CompanyViewModel>> Get(int companyID)
         {
             var model = await _companyRepo.
-                Find(a => a.ID == companyID && a.OwnerID == GetUserID());
+                FindAsync(a => a.ID == companyID && a.OwnerID == GetUserID());
 
             return new OkObjectResult(_mapper.Map<Company, CompanyViewModel>(model));
         }
@@ -70,7 +70,7 @@ namespace MakeInvoice.Api.Controllers
                         return BadRequest("Legal Address should be provided");
 
                     var address = _mapper.Map<AddressViewModel, Address>(model.LegalAdress);
-                    address = await _addressRepo .Create(address);
+                    address = await _addressRepo .CreateAsync(address);
                     model.LegalAddressID = address.AddressID;
                 }
 
@@ -80,11 +80,11 @@ namespace MakeInvoice.Api.Controllers
                         return BadRequest("Postal Address should be provided");
 
                     var address = _mapper.Map<AddressViewModel, Address>(model.PostalAddress);
-                    address = await _addressRepo.Create(address);
+                    address = await _addressRepo.CreateAsync(address);
                     model.PostalAddressID = address.AddressID;
                 }
 
-                await _companyRepo.Create(company);
+                await _companyRepo.CreateAsync(company);
                 return new OkObjectResult( _mapper.Map<Company, CompanyViewModel>(company));
             }
 
@@ -97,12 +97,12 @@ namespace MakeInvoice.Api.Controllers
         {
             if (ModelState.IsValid)
             {
-                var isExists = _companyRepo.Find(a => a.ID == model.CompanyID && a.OwnerID == GetUserID()) != null;
+                var isExists = _companyRepo.FindAsync(a => a.ID == model.CompanyID && a.OwnerID == GetUserID()) != null;
                 if (!isExists)
                     return BadRequest("Company doesn't exist");
 
                 var company = _mapper.Map<CompanyViewModel, Company>(model);
-                await _companyRepo.Update(company);
+                await _companyRepo.UpdateAsync(company);
                 return new OkObjectResult(model);
             }
 

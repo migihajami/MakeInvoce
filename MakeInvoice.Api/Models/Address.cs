@@ -26,6 +26,7 @@ namespace MakeInvoice.Api.Models
         public List<BankInfo> BankInfos { get; set; }
 
         public bool IsDeleted { get; set; }
+        public string OwnerID { get; set; }
 
     }
 }

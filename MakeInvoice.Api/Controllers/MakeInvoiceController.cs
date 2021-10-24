@@ -8,7 +8,7 @@ namespace MakeInvoice.Api.Controllers
 {
     public class MakeInvoiceController: Controller
     {
-        public string GetUserID()
+        protected string GetUserID()
         {
             return User.FindFirst(c => c.Type == "jti")?.Value;
         }

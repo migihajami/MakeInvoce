@@ -1,4 +1,7 @@
-﻿using MakeInoice.Common.ViewModels;
+﻿using AutoMapper;
+using MakeInoice.Common.ViewModels;
+using MakeInvoice.Api.Interfaces;
+using MakeInvoice.Api.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,28 +23,69 @@ namespace MakeInvoice.Api.Controllers
     [Route("[controller]/[action]")]
     public class AddressController: MakeInvoiceController
     {
-        [HttpPost]
-        public async Task<ActionResult> Get(int addressID)
+        private readonly IAddressRepository _addressRepo;
+        private readonly IMapper _mapper;
+
+        public AddressController(IAddressRepository addressRepo, IMapper mapper )
         {
-            throw new NotImplementedException();
+            _addressRepo = addressRepo;
+            _mapper = mapper;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<List<AddressViewModel>>> GetAll()
+        {
+            var addresses = await _addressRepo.FindAllAsync(a => a.OwnerID == GetUserID());
+            var result = _mapper.Map<List<Address>, List<AddressViewModel>>(addresses);
+
+            return new OkObjectResult(result);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<AddressViewModel>> Get(int addressID)
+        {
+            var address = await _addressRepo.FindAsync(a => a.AddressID == addressID && a.OwnerID == GetUserID());
+            if (address == null)
+                return NotFound($"address with ID = '{addressID}' doesn't exist");
+
+            var model = _mapper.Map<Address, AddressViewModel>(address);
+            return new OkObjectResult(model);
         }
 
         [HttpPost]
         public async Task<ActionResult> Add(AddressViewModel model)
         {
-            throw new NotImplementedException();
+            var address = _mapper.Map<AddressViewModel, Address>(model);
+            address.OwnerID = GetUserID();
+
+            var newAddress = await _addressRepo.CreateAsync(address);
+            if (newAddress?.AddressID > 0)
+                return new OkResult();
+
+            return BadRequest();
         }
 
         [HttpPost]
-        public async Task<ActionResult> Delete(int address)
+        public async Task<ActionResult> Delete(int addressID)
         {
-            throw new NotImplementedException();
+            var address = await _addressRepo.FindAsync(a => a.AddressID == addressID && a.OwnerID == GetUserID());
+            if (address == null)
+                return NotFound($"Address with ID = '{addressID}' doesn't exist");
+
+            await _addressRepo.DeleteAsync(address);
+            return Ok();
         }
 
         [HttpPost]
         public async Task<ActionResult> Update(AddressViewModel model)
         {
-            throw new NotImplementedException();
+            var address = await _addressRepo.FindAsync(a => a.AddressID == model.AddressID && a.OwnerID == GetUserID());
+            if (address == null)
+                return NotFound($"Address with ID = '{model.AddressID}' doesn't exist");
+
+            address = _mapper.Map<AddressViewModel, Address>(model);
+            await _addressRepo.UpdateAsync(address);
+            return Ok();
         }
     }
 }
