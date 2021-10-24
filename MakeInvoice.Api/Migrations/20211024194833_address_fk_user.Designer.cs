@@ -3,15 +3,17 @@ using System;
 using MakeInvoice.Api;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace MakeInvoice.Api.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211024194833_address_fk_user")]
+    partial class address_fk_user
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,17 +83,12 @@ namespace MakeInvoice.Api.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("OwnerID")
-                        .HasColumnType("text");
-
                     b.Property<string>("Swift")
                         .HasColumnType("text");
 
                     b.HasKey("BankInfoID");
 
                     b.HasIndex("AddressID");
-
-                    b.HasIndex("OwnerID");
 
                     b.ToTable("BankInfos");
                 });
@@ -185,9 +182,6 @@ namespace MakeInvoice.Api.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<string>("OwnerID")
-                        .HasColumnType("text");
-
                     b.Property<bool>("VatApplicable")
                         .HasColumnType("boolean");
 
@@ -199,8 +193,6 @@ namespace MakeInvoice.Api.Migrations
                     b.HasIndex("CompanyID");
 
                     b.HasIndex("ContractorID");
-
-                    b.HasIndex("OwnerID");
 
                     b.ToTable("Invoices");
                 });
@@ -224,9 +216,6 @@ namespace MakeInvoice.Api.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<string>("OwnerID")
-                        .HasColumnType("text");
-
                     b.Property<decimal>("UnitCount")
                         .HasColumnType("numeric");
 
@@ -240,8 +229,6 @@ namespace MakeInvoice.Api.Migrations
                     b.HasKey("InvoiceItemID");
 
                     b.HasIndex("InvoiceID");
-
-                    b.HasIndex("OwnerID");
 
                     b.ToTable("InvoiceItems");
                 });
@@ -469,13 +456,7 @@ namespace MakeInvoice.Api.Migrations
                         .WithMany("BankInfos")
                         .HasForeignKey("AddressID");
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerID");
-
                     b.Navigation("Address");
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("MakeInvoice.Api.Models.Company", b =>
@@ -517,15 +498,9 @@ namespace MakeInvoice.Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerID");
-
                     b.Navigation("Company");
 
                     b.Navigation("Contractor");
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("MakeInvoice.Api.Models.InvoiceItem", b =>
@@ -536,13 +511,7 @@ namespace MakeInvoice.Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerID");
-
                     b.Navigation("Invoice");
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

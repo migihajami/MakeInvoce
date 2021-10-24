@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace MakeInvoice.Api.Models
 {
@@ -18,6 +19,8 @@ namespace MakeInvoice.Api.Models
         public string AccountNumber { get; set; }
 
         public bool IsDeleted { get; set; }
+        public string OwnerID { get; set; }
+        public IdentityUser Owner { get; set; }    
     }
 }
 

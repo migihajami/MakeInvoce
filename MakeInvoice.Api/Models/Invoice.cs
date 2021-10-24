@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -40,6 +41,8 @@ namespace MakeInvoice.Api.Models
         public List<InvoiceItem> InvoiceItems { get; set; }
 
         public bool IsDeleted { get; set; }
+        public string OwnerID { get; set; }
+        public IdentityUser Owner { get; set; }
 
     }
 }
