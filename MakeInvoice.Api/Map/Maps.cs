@@ -13,6 +13,11 @@ namespace MakeInvoice.Api.Map
         public Maps()
         {
             CreateMap<Company, CompanyViewModel>().ReverseMap();
+            CreateMap<Address, AddressViewModel>().ReverseMap();
+            CreateMap<BankInfo, BankInfoViewModel>().ReverseMap();
+            CreateMap<Invoice, InvoiceViewModel>().ReverseMap();
+            CreateMap<InvoiceItem, InvoiceItemViewModel>().ReverseMap();
+            CreateMap<Contractor, ContractorViewModel>().ReverseMap();
         }   
     }
 }
