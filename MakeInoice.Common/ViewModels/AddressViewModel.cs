@@ -7,6 +7,7 @@
     /// <date>2021-10-18</date>
     public class AddressViewModel
     {
+        public int? AddressID { get; set; }
         public string Country { get; set; }
         public string City { get; set; }
         public string Line1 { get; set; }
