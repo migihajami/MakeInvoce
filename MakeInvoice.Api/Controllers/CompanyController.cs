@@ -20,7 +20,7 @@ namespace MakeInvoice.Api.Controllers
     /// <author>Alexey Bubley</author>
     /// <date>2021-10-18</date>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.Controller" />
-    
+
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [Route("[controller]/[action]")]
@@ -61,31 +61,11 @@ namespace MakeInvoice.Api.Controllers
             var company = _mapper.Map<CompanyViewModel, Company>(model);
             company.OwnerID = GetUserID();
             company.InsertDate = DateTime.Now;
-            
+
             if (ModelState.IsValid)
             {
-                if (model.LegalAddressID == null)
-                {
-                    if (model.LegalAdress == null)
-                        return BadRequest("Legal Address should be provided");
-
-                    var address = _mapper.Map<AddressViewModel, Address>(model.LegalAdress);
-                    address = await _addressRepo .CreateAsync(address);
-                    model.LegalAddressID = address.AddressID;
-                }
-
-                if (model.PostalAddressID == null)
-                {
-                    if (model.PostalAddress == null)
-                        return BadRequest("Postal Address should be provided");
-
-                    var address = _mapper.Map<AddressViewModel, Address>(model.PostalAddress);
-                    address = await _addressRepo.CreateAsync(address);
-                    model.PostalAddressID = address.AddressID;
-                }
-
                 await _companyRepo.CreateAsync(company);
-                return new OkObjectResult( _mapper.Map<Company, CompanyViewModel>(company));
+                return new OkObjectResult(_mapper.Map<Company, CompanyViewModel>(company));
             }
 
             return BadRequest(ModelState);

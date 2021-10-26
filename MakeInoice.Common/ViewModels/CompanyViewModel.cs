@@ -1,4 +1,6 @@
-﻿namespace MakeInoice.Common.ViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MakeInoice.Common.ViewModels
 {
     /// <summary>
     /// Company View Model
@@ -8,14 +10,29 @@
     public class CompanyViewModel
     {
         public int CompanyID { get; set; }
+
+        [Required]
         public string LegalName { get; set; }
+
+        [Required]
         public string RegNumber { get; set; }
+
         public string VatNumber { get; set; }
+
+        [Required]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
+
+        [Required]
+        [DataType(DataType.PhoneNumber)]
         public string Phone { get; set; }
-        public int? LegalAddressID { get; set; }
-        public AddressViewModel LegalAdress { get; set; }
-        public int? PostalAddressID { get; set; }
-        public AddressViewModel PostalAddress { get; set; }
+
+        [Required]
+        [Range(1, int.MaxValue)]
+        public int LegalAddressID { get; set; }
+
+        [Required]
+        [Range(1, int.MaxValue)]
+        public int PostalAddressID { get; set; }
     }
 }

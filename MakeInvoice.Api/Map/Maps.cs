@@ -12,7 +12,9 @@ namespace MakeInvoice.Api.Map
     {
         public Maps()
         {
-            CreateMap<Company, CompanyViewModel>().ReverseMap();
+            CreateMap<Company, CompanyViewModel>()
+                .ForMember(dest => dest.CompanyID, opt => opt.MapFrom(a => a.ID))
+                .ReverseMap();
             CreateMap<Address, AddressViewModel>().ReverseMap();
             CreateMap<BankInfo, BankInfoViewModel>().ReverseMap();
             CreateMap<Invoice, InvoiceViewModel>().ReverseMap();
