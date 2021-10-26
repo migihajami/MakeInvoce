@@ -12,7 +12,7 @@ namespace MakeInvoice.Api.Models
 
         public int BankAddressID { get; set; }
 
-        public Address Address { get; set; }
+        public Address BankAddress { get; set; }
 
         public string Swift { get; set; }
 
