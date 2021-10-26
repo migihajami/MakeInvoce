@@ -1,4 +1,6 @@
-﻿namespace MakeInoice.Common.ViewModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MakeInoice.Common.ViewModels
 {
     /// <summary>
     /// Invoice Item View Model
@@ -7,14 +9,21 @@
     /// <date>2021-10-18</date>
     public class InvoiceItemViewModel
     {
+        public int InvoiceItemID { get; set; }
+
+        [Required]
         public string Name { get; set; }
 
         public string Info { get; set; }
 
+        [Required]
+        [MaxLength(50)]
         public string UnitType { get; set; }
 
+        [Required]
         public decimal UnitCount { get; set; }
 
+        [Required]
         public decimal UnitPrice { get; set; }
 
     }

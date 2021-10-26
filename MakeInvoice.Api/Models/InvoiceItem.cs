@@ -19,12 +19,16 @@ namespace MakeInvoice.Api.Models
         [MaxLength(50)]
         public string UnitType { get; set; }
 
+        [Required]
         public decimal UnitCount { get; set; }
 
+        [Required]
         public decimal UnitPrice { get; set; }
 
         public bool IsDeleted { get; set; }
+
         public string OwnerID { get; set; }
+
         public IdentityUser Owner { get; set; }
     }
 }
