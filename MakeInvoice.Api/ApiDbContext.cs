@@ -10,6 +10,7 @@ namespace MakeInvoice.Api
 {
     public class ApiDbContext: IdentityDbContext
     {
+        //TODO split ApiDbContex and IdentityDbContext.
         public ApiDbContext(DbContextOptions<ApiDbContext> options): base(options)
         {
 
