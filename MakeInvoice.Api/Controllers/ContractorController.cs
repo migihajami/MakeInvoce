@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace MakeInvoice.Api.Controllers
 {
     /// <summary>
-    /// 
+    /// Contractor controller
     /// </summary>
     /// <author>Alexey Bubley</author>
     /// <date>2021-10-26</date>
