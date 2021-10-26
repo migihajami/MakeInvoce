@@ -75,6 +75,11 @@ namespace MakeInvoic.Api
             //services.AddScoped<UserManager<IdentityUser>, UserManager<IdentityUser>>();
 
             services.AddScoped<ICompanyRepository, CompanyRepository>();
+            services.AddScoped<IAddressRepository, AddressRepository>();
+            services.AddScoped<IBankInfoRepository, BankInfoRepository>();
+            services.AddScoped<IContractorRepository, ContractorRepository>();
+            services.AddScoped<IInvoiceItemRepository, InvoiceItemRepository>();
+            services.AddScoped<IInvoiceRepository, InvoiceRepository>();
 
             services.AddIdentity<IdentityUser, IdentityRole>(options => { }).AddEntityFrameworkStores<ApiDbContext>().AddDefaultTokenProviders();
             services.AddAutoMapper(typeof(Maps));
