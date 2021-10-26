@@ -15,11 +15,18 @@ namespace MakeInvoice.Api.Map
             CreateMap<Company, CompanyViewModel>()
                 .ForMember(dest => dest.CompanyID, opt => opt.MapFrom(a => a.ID))
                 .ReverseMap();
+
             CreateMap<Address, AddressViewModel>().ReverseMap();
+
             CreateMap<BankInfo, BankInfoViewModel>().ReverseMap();
+
             CreateMap<Invoice, InvoiceViewModel>().ReverseMap();
+
             CreateMap<InvoiceItem, InvoiceItemViewModel>().ReverseMap();
-            CreateMap<Contractor, ContractorViewModel>().ReverseMap();
+
+            CreateMap<Contractor, ContractorViewModel>()
+                .ForMember(dest => dest.ContractorID, opt => opt.MapFrom(a => a.ID))
+                .ReverseMap();
         }   
     }
 }
