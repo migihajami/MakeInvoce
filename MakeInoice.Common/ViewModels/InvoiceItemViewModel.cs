@@ -12,6 +12,10 @@ namespace MakeInoice.Common.ViewModels
         public int InvoiceItemID { get; set; }
 
         [Required]
+        [Range(1, int.MaxValue)]
+        public int InvoiceID { get; set; }
+
+        [Required]
         public string Name { get; set; }
 
         public string Info { get; set; }
