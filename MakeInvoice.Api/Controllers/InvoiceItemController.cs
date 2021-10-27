@@ -65,7 +65,9 @@ namespace MakeInvoice.Api.Controllers
             if (item == null)
                 return NotFound($"Invoice item with ID = '{model.InvoiceItemID} doesn't exist");
 
-            await _itemRepo.UpdateAsync(_mapper.Map<InvoiceItemViewModel, InvoiceItem>(model));
+            item = _mapper.Map<InvoiceItemViewModel, InvoiceItem>(model);
+            item.OwnerID = GetUserID();
+            await _itemRepo.UpdateAsync(item);
             return Ok();
         }
 

@@ -84,6 +84,7 @@ namespace MakeInvoice.Api.Controllers
                 return NotFound($"Address with ID = '{model.AddressID}' doesn't exist");
 
             address = _mapper.Map<AddressViewModel, Address>(model);
+            address.OwnerID = GetUserID();
             await _addressRepo.UpdateAsync(address);
             return Ok();
         }

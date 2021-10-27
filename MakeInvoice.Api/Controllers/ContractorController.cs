@@ -69,7 +69,9 @@ namespace MakeInvoice.Api.Controllers
             if (contractor == null)
                 return NotFound($"Contractor whith ID = '{model.ContractorID}' doesn't exist");
 
-            await _contractorRepo.UpdateAsync(_mapper.Map<ContractorViewModel, Contractor>(model));
+            contractor = _mapper.Map<ContractorViewModel, Contractor>(model);
+            contractor.OwnerID = GetUserID();
+            await _contractorRepo.UpdateAsync(contractor);
             return Ok();
         }
 

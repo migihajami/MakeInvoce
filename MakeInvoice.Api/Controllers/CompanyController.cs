@@ -82,6 +82,7 @@ namespace MakeInvoice.Api.Controllers
                     return BadRequest("Company doesn't exist");
 
                 var company = _mapper.Map<CompanyViewModel, Company>(model);
+                company.OwnerID = GetUserID();
                 await _companyRepo.UpdateAsync(company);
                 return new OkObjectResult(model);
             }

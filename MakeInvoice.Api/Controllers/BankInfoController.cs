@@ -71,7 +71,9 @@ namespace MakeInvoice.Api.Controllers
             if (bankInfo == null)
                 return NotFound($"Bank Info with ID = '{model.BankInfoID}' doesn't exist");
 
-            await _bankRepo.UpdateAsync(_mapper.Map<BankInfoViewModel, BankInfo>(model));
+            bankInfo = _mapper.Map<BankInfoViewModel, BankInfo>(model);
+            bankInfo.OwnerID = GetUserID();
+            await _bankRepo.UpdateAsync(bankInfo);
             return Ok();
         }
 
