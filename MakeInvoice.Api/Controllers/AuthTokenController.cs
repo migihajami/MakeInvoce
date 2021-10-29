@@ -22,7 +22,7 @@ namespace MakeInvoice.Api.Controllers
     /// <seealso cref="Microsoft.AspNetCore.Mvc.Controller" />
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthTokenController : Controller
+    public class AuthTokenController : MakeInvoiceController
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IConfiguration _configuration;
