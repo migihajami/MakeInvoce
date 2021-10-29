@@ -43,6 +43,7 @@ namespace MakeInvoice.Api.Controllers
             var issuer = _configuration["Jwt:Issuer"];
             var audience = _configuration["Jwt:Audience"];
             var key = _configuration["Jwt:Key"];
+            int lifetime = int.Parse(_configuration["Jwt:TokenLifetime"]);
 
 
             if (!ModelState.IsValid)
@@ -64,7 +65,7 @@ namespace MakeInvoice.Api.Controllers
 
             var theKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
             var creds = new SigningCredentials(theKey, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(issuer, audience, claims, expires: DateTime.Now.AddMinutes(30), signingCredentials: creds);
+            var token = new JwtSecurityToken(issuer, audience, claims, expires: DateTime.Now.AddMinutes(lifetime), signingCredentials: creds);
 
             return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) }); ;
         }
