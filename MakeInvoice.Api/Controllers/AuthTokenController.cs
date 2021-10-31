@@ -61,6 +61,7 @@ namespace MakeInvoice.Api.Controllers
                 {
                     new Claim(JwtRegisteredClaimNames.Email , user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti , user.Id),
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Id)
                 };
 
             var theKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));

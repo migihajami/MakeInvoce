@@ -52,8 +52,6 @@ namespace MakeInvoic.Api
             _issuer = Configuration["Jwt:Issuer"];
             _audience = Configuration["Jwt:Audience"];
             _securityKey = Configuration["Jwt:Key"];
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-
 
             services.AddDbContext<ApiDbContext>(opt =>
                 opt.UseNpgsql(connString));
