@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MakeInvoice.BusinessLogic",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MakeInvoice.Api", "MakeInvoice.Api\MakeInvoice.Api.csproj", "{A07EF95C-0E7D-4E99-8ECD-4AB6CB132931}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MakeInoice.Common", "MakeInoice.Common\MakeInoice.Common.csproj", "{645F0A13-51A1-4FAD-91C6-1FC1E695906B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MakeInvoice.Common", "MakeInoice.Common\MakeInvoice.Common.csproj", "{645F0A13-51A1-4FAD-91C6-1FC1E695906B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MakeInvoice.Frontend", "MakeInvoice.Frontend\MakeInvoice.Frontend.csproj", "{A74FCC62-6239-47F9-83EF-C6A86829FAC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{645F0A13-51A1-4FAD-91C6-1FC1E695906B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{645F0A13-51A1-4FAD-91C6-1FC1E695906B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{645F0A13-51A1-4FAD-91C6-1FC1E695906B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A74FCC62-6239-47F9-83EF-C6A86829FAC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A74FCC62-6239-47F9-83EF-C6A86829FAC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A74FCC62-6239-47F9-83EF-C6A86829FAC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A74FCC62-6239-47F9-83EF-C6A86829FAC1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

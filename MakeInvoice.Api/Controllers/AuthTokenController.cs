@@ -1,4 +1,5 @@
-﻿using MakeInoice.Common.ViewModels;
+﻿using MakeInvoice.Api.Utils;
+using MakeInvoice.Common.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -64,11 +65,11 @@ namespace MakeInvoice.Api.Controllers
                     new Claim(JwtRegisteredClaimNames.Sub, user.Id)
                 };
 
-            var theKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-            var creds = new SigningCredentials(theKey, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(issuer, audience, claims, expires: DateTime.Now.AddMinutes(lifetime), signingCredentials: creds);
+            //var theKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+            //var creds = new SigningCredentials(theKey, SecurityAlgorithms.HmacSha256);
+            //var token = new JwtSecurityToken(issuer, audience, claims, expires: DateTime.Now.AddMinutes(lifetime), signingCredentials: creds);
 
-            return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) }); ;
+            return Ok(new TokenGenerator(_configuration).GenerateFullToken(claims));
         }
     }
 }

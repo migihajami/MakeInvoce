@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MakeInoice.Common.ViewModels;
+using MakeInvoice.Common.ViewModels;
 using MakeInvoice.Api.Models;
 using System;
 using System.Collections.Generic;

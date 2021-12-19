@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MakeInoice.Common\MakeInoice.Common.csproj" />
+    <ProjectReference Include="..\MakeInoice.Common\MakeInvoice.Common.csproj" />
   </ItemGroup>
 
 </Project>

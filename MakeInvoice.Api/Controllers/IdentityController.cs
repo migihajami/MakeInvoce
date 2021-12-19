@@ -1,4 +1,4 @@
-﻿using MakeInoice.Common.ViewModels;
+﻿using MakeInvoice.Common.ViewModels;
 using MakeInvoice.Api.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

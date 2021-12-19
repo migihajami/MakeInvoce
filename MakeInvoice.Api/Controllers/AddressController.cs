@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MakeInoice.Common.ViewModels;
+using MakeInvoice.Common.ViewModels;
 using MakeInvoice.Api.Interfaces;
 using MakeInvoice.Api.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
