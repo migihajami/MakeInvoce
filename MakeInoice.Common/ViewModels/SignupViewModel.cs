@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MakeInoice.Common.ViewModels
+namespace MakeInvoice.Common.ViewModels
 {
     /// <summary>
     /// Signup View Model

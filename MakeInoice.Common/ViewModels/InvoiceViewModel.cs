@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace MakeInoice.Common.ViewModels
+namespace MakeInvoice.Common.ViewModels
 {
     /// <summary>
     /// Invoice View Model

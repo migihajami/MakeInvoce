@@ -1,4 +1,4 @@
-﻿namespace MakeInoice.Common.ViewModels
+﻿namespace MakeInvoice.Common.ViewModels
 {
     /// <summary>
     /// User View Model
